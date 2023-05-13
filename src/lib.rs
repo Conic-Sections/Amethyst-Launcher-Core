@@ -4,6 +4,7 @@ mod launcher {
 mod installer {
     pub mod task;
     pub mod vanilla;
+    pub mod fabric;
 }
 mod utils {
     pub mod download;
