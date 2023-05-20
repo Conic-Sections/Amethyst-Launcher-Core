@@ -6,44 +6,44 @@ use crate::utils::folder::MinecraftLocation;
 
 #[derive(Debug, Deserialize)]
 pub struct FabricArtifactVersion {
-    gameVersion: Option<String>,
-    separator: Option<String>,
-    build: Option<usize>,
-    maven: String,
-    version: String,
-    stable: bool,
+    pub gameVersion: Option<String>,
+    pub separator: Option<String>,
+    pub build: Option<usize>,
+    pub maven: String,
+    pub version: String,
+    pub stable: bool,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct FabricArtifacts {
-    mappings: Vec<FabricArtifactVersion>,
-    loader: Vec<FabricArtifactVersion>,
+    pub mappings: Vec<FabricArtifactVersion>,
+    pub loader: Vec<FabricArtifactVersion>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct FabricLoaderArtifact {
-    loader: FabricArtifactVersion,
-    intermediary: FabricArtifactVersion,
-    launcherMeta: LauncherMeta,
+    pub loader: FabricArtifactVersion,
+    pub intermediary: FabricArtifactVersion,
+    pub launcherMeta: LauncherMeta,
 }
 
 #[derive(Debug, Deserialize)]
-struct LauncherMeta {
-    version: usize,
-    libraries: LauncherMetaLibraries,
-    mainClass: Value,
+pub struct LauncherMeta {
+    pub version: usize,
+    pub libraries: LauncherMetaLibraries,
+    pub mainClass: Value,
 }
 
 #[derive(Debug, Deserialize)]
-struct LauncherMetaLibraries {
-    client: Vec<LauncherMetaLibrariesItems>,
-    common: Vec<LauncherMetaLibrariesItems>,
-    server: Vec<LauncherMetaLibrariesItems>,
+pub struct LauncherMetaLibraries {
+    pub client: Vec<LauncherMetaLibrariesItems>,
+    pub common: Vec<LauncherMetaLibrariesItems>,
+    pub server: Vec<LauncherMetaLibrariesItems>,
 }
 #[derive(Debug, Deserialize, Serialize, Clone)]
-struct LauncherMetaLibrariesItems {
-    name: Option<String>,
-    url: Option<String>,
+pub struct LauncherMetaLibrariesItems {
+    pub name: Option<String>,
+    pub url: Option<String>,
 }
 pub async fn get_fabric_artifacts() -> FabricArtifacts {
     reqwest::get("https://meta.fabricmc.net/v2/versions")
