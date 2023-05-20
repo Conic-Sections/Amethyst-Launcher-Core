@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::{format, fs, println, vec};
+use std::{format, fs, io::copy, println, vec};
 
 use crate::utils::folder::MinecraftLocation;
 
@@ -128,11 +128,12 @@ pub struct FabricInstallOptions {
     pub yarn_version: Option<YarnVersion>,
 }
 
+/// 根据 yarn 和 loader 生成 fabric 版本的 JSON 文件到磁盘中。
 pub async fn install_fabric(
     loader: FabricLoaderArtifact,
     minecraft_location: MinecraftLocation,
     options: FabricInstallOptions,
-) {
+) -> String {
     let yarn: Option<String>;
     let side = options.size.unwrap_or(FabricInstallSide::Client);
     let mut id = options.version_id;
@@ -204,17 +205,12 @@ pub async fn install_fabric(
 
     let json_file_path = minecraft_location.get_version_json(&id.clone().unwrap());
     fs::create_dir_all(json_file_path.parent().unwrap()).unwrap();
-    let json_file;
     if let Ok(metadata) = fs::metadata(&json_file_path) {
         if metadata.is_file() {
             fs::remove_file(&json_file_path).unwrap();
-            json_file = fs::File::create(json_file_path);
         } else {
             fs::remove_dir_all(&json_file_path).unwrap();
-            json_file = fs::File::create(json_file_path);
         }
-    } else {
-        json_file = fs::File::create(json_file_path);
     }
     #[derive(Serialize)]
     struct FabricVersionJSON {
@@ -232,7 +228,7 @@ pub async fn install_fabric(
         jvm: Vec<i32>,
     }
     let version_json = FabricVersionJSON {
-        id: id.unwrap_or("".to_string()),
+        id: id.clone().unwrap_or("".to_string()),
         inheritsFrom: inherits_from,
         mainClass: main_class,
         libraries: serde_json::to_string(&libraries).unwrap_or("".to_string()),
@@ -243,10 +239,13 @@ pub async fn install_fabric(
         releaseTime: "2023-05-13T15:58:54.493Z".to_string(),
         time: "2023-05-13T15:58:54.493Z".to_string(),
     };
-    let json_data = serde_json::to_string_pretty(&version_json).unwrap_or("".to_string()).to_string();
+    let json_data = serde_json::to_string_pretty(&version_json)
+        .unwrap_or("".to_string())
+        .to_string();
+    tokio::fs::write(json_file_path, json_data).await.unwrap();
+
+    id.unwrap_or("".to_string())
 }
 
 #[tokio::test]
-async fn test() {
-    
-}
+async fn test() {}
