@@ -5,6 +5,7 @@ pub mod installer {
     pub mod task;
     pub mod vanilla;
     pub mod fabric;
+    pub mod forge;
 }
 pub mod utils {
     pub mod download;

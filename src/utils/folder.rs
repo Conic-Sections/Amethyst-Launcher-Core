@@ -1,4 +1,7 @@
-use std::{path::{Path, PathBuf}, format};
+use std::{
+    format,
+    path::{Path, PathBuf},
+};
 #[derive(Debug)]
 pub struct MinecraftLocation {
     pub root: PathBuf,
@@ -31,9 +34,9 @@ impl MinecraftLocation {
             screenshots: path.join("screenshots"),
         }
     }
-    
-    pub fn get_version_json(&self,id:&str) -> PathBuf {
-        self.versions.join(format!("{}/{}.json",id,id))
+
+    pub fn get_version_json(&self, id: &str) -> PathBuf {
+        self.versions.join(format!("{}/{}.json", id, id))
     }
 }
 

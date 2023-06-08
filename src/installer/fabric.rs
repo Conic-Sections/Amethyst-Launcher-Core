@@ -40,11 +40,13 @@ pub struct LauncherMetaLibraries {
     pub common: Vec<LauncherMetaLibrariesItems>,
     pub server: Vec<LauncherMetaLibrariesItems>,
 }
+
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct LauncherMetaLibrariesItems {
     pub name: Option<String>,
     pub url: Option<String>,
 }
+
 pub async fn get_fabric_artifacts() -> FabricArtifacts {
     reqwest::get("https://meta.fabricmc.net/v2/versions")
         .await
@@ -53,6 +55,7 @@ pub async fn get_fabric_artifacts() -> FabricArtifacts {
         .await
         .unwrap()
 }
+
 pub async fn get_yarn_artifact_list() -> Vec<FabricArtifactVersion> {
     reqwest::get("https://meta.fabricmc.net/v2/versions/yarn")
         .await
@@ -118,8 +121,6 @@ pub enum YarnVersion {
 }
 pub struct FabricInstallOptions {
     /// 当你想要在另一个版本的基础上安装一个版本时。
-    ///
-    /// 比如，你想要在 Forge 版本上安装 Liteloader。你应该将这个填写为对应的 Forge 版本 id。
     pub inherits_from: Option<String>,
 
     /// 覆盖新安装的版本 id。
@@ -248,4 +249,16 @@ pub async fn install_fabric(
 }
 
 #[tokio::test]
-async fn test() {}
+async fn test() {
+    // let b = get_loader_artifact_list().await;
+    let a = get_fabric_loader_artifact("1.19.4", "0.1.0.48").await;
+    let options = FabricInstallOptions {
+        inherits_from: None,
+        version_id: None,
+        size: None,
+        yarn_version: None
+    };
+    let location = MinecraftLocation::new("test");
+    // println!("{:#?}",a);
+        install_fabric(a, location, options).await;
+}

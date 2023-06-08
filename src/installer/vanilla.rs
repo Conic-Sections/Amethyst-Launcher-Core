@@ -153,7 +153,6 @@ pub async fn install(version_id: &str, minecraft_location: MinecraftLocation, ta
         download_list,
         task.total.load(Ordering::SeqCst),
         task.progress,
-        false,
     )
     .await;
 }
