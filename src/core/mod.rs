@@ -16,6 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+//! The core of the entire crate.
+//!
+//! # Example
+//!
+//! Get platform information:
+//!
+//! ```rust
+//! async fn fn_name {
+//!     use magical_launcher_core::core::PlatformInfo;
+//!     let platform_info = PlatformInfo::new().await;
+//! }
+//! ```
+
 pub mod folder;
 pub mod task;
 pub mod version;
