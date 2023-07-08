@@ -21,7 +21,7 @@ use tokio::fs::{self, create_dir_all};
 
 use crate::core::{folder::MinecraftLocation, version::LibraryInfo};
 
-use super::{install_profile::InstallProfileLegacy, *};
+use super::{*, install_profile::InstallProfileLegacy};
 
 pub(super) async fn install_legacy_forge_from_zip(
     entries: ForgeLegacyInstallerEntriesPatten,
@@ -70,8 +70,8 @@ pub(super) async fn install_legacy_forge_from_zip(
         version_json_path,
         serde_json::to_string_pretty(&version_json)?,
     )
-    .await
-    ?;
+        .await
+        ?;
 
     create_dir_all(
         minecraft
@@ -79,14 +79,14 @@ pub(super) async fn install_legacy_forge_from_zip(
             .parent()
             .unwrap(),
     )
-    .await
-    ?;
+        .await
+        ?;
     fs::write(
         minecraft.get_library_by_path(&library.path),
         entries.legacy_universal_jar.content,
     )
-    .await
-    ?;
+        .await
+        ?;
 
     Ok(())
 }

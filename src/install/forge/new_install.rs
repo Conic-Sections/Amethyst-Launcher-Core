@@ -33,8 +33,8 @@ use crate::{
 };
 
 use super::{
-    install_profile::{InstallProfile, InstallProfileData},
     *,
+    install_profile::{InstallProfile, InstallProfileData},
 };
 
 pub(super) async fn unpack_forge_installer<R: Read + io::Seek>(
@@ -147,7 +147,7 @@ pub(super) async fn unpack_forge_installer<R: Read + io::Seek>(
             minecraft.get_library_by_path(&file_name[file_name.find("/").unwrap() + 1..]),
             forge_jar.content,
         )
-        .await?;
+            .await?;
     }
 
     let unpack_data = |entry: Entry| -> Result<()> {
@@ -181,7 +181,7 @@ pub(super) async fn unpack_forge_installer<R: Read + io::Seek>(
         version_json_path,
         serde_json::to_string_pretty(&version_json)?,
     )
-    .await?;
+        .await?;
 
     decompression_files(zip, decompression_tasks).await;
 

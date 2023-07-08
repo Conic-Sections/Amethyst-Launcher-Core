@@ -21,16 +21,16 @@ use reqwest::Url;
 use serde_json::Value;
 use tokio::io::AsyncWriteExt;
 
-use crate::core::version::ResolvedLibrary;
 use crate::{
     core::{
         folder::{get_path, MinecraftLocation},
+        PlatformInfo,
         task::TaskEventListeners,
         version::{self, AssetIndex, AssetIndexObject, ResolvedVersion, VersionManifest},
-        PlatformInfo,
     },
-    utils::download::{download_files, Download},
+    utils::download::{Download, download_files},
 };
+use crate::core::version::ResolvedLibrary;
 
 pub mod fabric;
 pub mod forge;
@@ -62,12 +62,7 @@ pub(crate) async fn generate_assets_download_list(
     minecraft_location: &MinecraftLocation,
 ) -> Result<Vec<Download<String>>> {
     let asset_index_url = Url::parse((&asset_index.url).as_ref())?;
-    let asset_index_raw = reqwest::get(asset_index_url)
-        .await
-        ?
-        .text()
-        .await
-        ?;
+    let asset_index_raw = reqwest::get(asset_index_url).await?.text().await?;
     let asset_index_json: Value = serde_json::from_str((&asset_index_raw).as_ref())?;
     let asset_index_object: AssetIndexObject =
         serde_json::from_value(asset_index_json["objects"].clone())?;
@@ -148,21 +143,16 @@ pub async fn install(
     let version_metadata = version_metadata.get(0).unwrap();
 
     let version_json_raw = reqwest::get(version_metadata.url.clone())
-        .await
-        ?
+        .await?
         .text()
-        .await
-        ?;
-    let version = version::Version::from_str(&version_json_raw)
-        ?
+        .await?;
+    let version = version::Version::from_str(&version_json_raw)?
         .parse(&minecraft_location, &platform)
         .await?;
     let id = &version.id;
 
     let version_json_path = minecraft_location.versions.join(format!("{id}/{id}.json"));
-    tokio::fs::create_dir_all(version_json_path.parent().unwrap())
-        .await
-        ?;
+    tokio::fs::create_dir_all(version_json_path.parent().unwrap()).await?;
     let mut file = tokio::fs::File::create(&version_json_path).await?;
     file.write_all(version_json_raw.as_bytes()).await?;
 
@@ -184,7 +174,7 @@ pub async fn install(
                 .ok_or(std::io::Error::from(std::io::ErrorKind::NotFound))?,
             &minecraft_location,
         )
-        .await?,
+            .await?,
     );
 
     download_files(download_list, listeners, false).await?;

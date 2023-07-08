@@ -29,15 +29,15 @@
 //! }
 //! ```
 
+use std::ffi::OsStr;
+use std::path::{Path, PathBuf};
+
+use serde::{Deserialize, Serialize};
+use tokio::process::Command;
+
 pub mod folder;
 pub mod task;
 pub mod version;
-
-use std::ffi::OsStr;
-use std::path::{Path, PathBuf};
-use tokio::process::Command;
-
-use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 pub(crate) enum OsType {
@@ -119,7 +119,7 @@ impl PlatformInfo {
             } else {
                 "unknown"
             }
-            .to_string(),
+                .to_string(),
         }
     }
 }

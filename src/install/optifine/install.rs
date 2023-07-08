@@ -21,14 +21,13 @@ use std::{ffi::OsStr, fmt::Display, path::Path};
 use anyhow::Result;
 use tokio::{fs, io::AsyncWriteExt};
 
-use crate::core::DELIMITER;
 use crate::{
     core::folder::MinecraftLocation,
-    install::optifine::DEFAULT_META_URL,
     utils::download::{download, Download},
 };
+use crate::core::DELIMITER;
 
-use super::InstallOptifineOptions;
+use super::{InstallOptifineOptions, DEFAULT_META_URL};
 
 const OPTIFINE_INSTALL_HELPER: &[u8] = include_bytes!("./optifine-installer.jar");
 
@@ -40,9 +39,9 @@ pub async fn download_optifine_installer<P, D>(
     dest_path: P,
     remote: Option<D>,
 ) -> Result<()>
-where
-    P: AsRef<Path> + AsRef<OsStr>,
-    D: Display,
+    where
+        P: AsRef<Path> + AsRef<OsStr>,
+        D: Display,
 {
     let url = match remote {
         None => format!("{DEFAULT_META_URL}/{minecraft_version}/{optifine_type}/{optifine_patch}"),
@@ -53,7 +52,7 @@ where
         file: dest_path,
         sha1: None,
     })
-    .await?;
+        .await?;
 
     Ok(())
 }
@@ -93,7 +92,7 @@ pub async fn install_optifine(
         full_path,
         options.remote,
     )
-    .await?;
+        .await?;
 
     let installer_path = minecraft
         .get_library_by_path("net/stevexmh/optifine-installer/0.0.0/optifine-installer.jar");

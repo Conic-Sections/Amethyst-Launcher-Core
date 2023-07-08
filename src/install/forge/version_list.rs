@@ -54,8 +54,8 @@ impl ForgeVersionList {
         Ok(reqwest::get(format!(
             "https://bmclapi2.bangbang93.com/forge/minecraft/{mcversion}"
         ))
-        .await?
-        .json::<Self>()
-        .await?)
+            .await?
+            .json::<Self>()
+            .await?)
     }
 }

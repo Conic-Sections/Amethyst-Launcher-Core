@@ -89,7 +89,7 @@ async fn download_forge_installer(
         file: file_path.clone(),
         sha1: None,
     })
-    .await;
+        .await;
     Ok((file_path, response?))
 }
 
@@ -195,7 +195,7 @@ pub async fn install_forge(
                 profile,
                 options,
             )
-            .await;
+                .await;
         }
         ForgeType::Legacy => {
             let profile: InstallProfileLegacy = serde_json::from_str(&install_profile_json)?;

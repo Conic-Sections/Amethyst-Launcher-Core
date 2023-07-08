@@ -16,14 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use std::ffi::OsStr;
+use std::path::{Path, PathBuf};
+use std::sync::Arc;
+use std::sync::atomic::{AtomicUsize, Ordering};
+
 use anyhow::Result;
 use futures::StreamExt;
 use once_cell::sync::Lazy;
 use reqwest::{Client, Response};
-use std::ffi::OsStr;
-use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::Arc;
 use tokio::fs;
 use tokio::io::AsyncWriteExt;
 

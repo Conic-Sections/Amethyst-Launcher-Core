@@ -19,7 +19,7 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-use crate::install::optifine::DEFAULT_META_URL;
+use super::DEFAULT_META_URL;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OptifineVersionListItem {

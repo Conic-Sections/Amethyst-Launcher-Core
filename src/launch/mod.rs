@@ -63,19 +63,21 @@
 //! }
 //! ```
 
-use crate::core::folder::MinecraftLocation;
-use crate::core::version::{ResolvedVersion, Version};
-use crate::core::{JavaExec, OsType, PlatformInfo, DELIMITER};
-use anyhow::Result;
-use once_cell::sync::Lazy;
-use regex::Regex;
-use serde_json::Value;
 use std::collections::HashMap;
 use std::env::vars;
 use std::path::{Path, PathBuf};
 use std::process::ExitStatus;
 use std::string::ToString;
+
+use anyhow::Result;
+use once_cell::sync::Lazy;
+use regex::Regex;
+use serde_json::Value;
 use tokio::process::Command;
+
+use crate::core::{DELIMITER, JavaExec, OsType, PlatformInfo};
+use crate::core::folder::MinecraftLocation;
+use crate::core::version::{ResolvedVersion, Version};
 
 pub static DEFAULT_EXTRA_JVM_ARGS: Lazy<Vec<String>> = Lazy::new(|| {
     vec![
@@ -426,7 +428,7 @@ impl LaunchArguments {
             "-Dcom.sun.jndi.cosnaming.object.trustURLCodebase=false".to_string(),
             "-Dlog4j2.formatMsgNoLookups=true".to_string(),
         ]); // todo: test the jvm args
-            // todo: support proxy
+        // todo: support proxy
 
         let mut jvm_options: HashMap<&str, String> = HashMap::new();
         jvm_options.insert(
@@ -527,8 +529,8 @@ impl LaunchArguments {
         }
         let no_width_arguments = None
             == command_arguments
-                .iter()
-                .find(|v| v == &&"--width".to_string());
+            .iter()
+            .find(|v| v == &&"--width".to_string());
         if no_width_arguments && !launch_options.fullscreen {
             command_arguments.extend(vec![
                 "--width".to_string(),
